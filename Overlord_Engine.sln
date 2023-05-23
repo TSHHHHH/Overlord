@@ -5,7 +5,7 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "Sandbox\Sandbox.vcxproj", "{72DA7EEC-B4BA-43B0-9560-127B7FCD50EA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Overlord_Engine", "Overlord_Engine\Overlord_Engine.vcxproj", "{9DB19EA1-8CD7-4BF2-8FD7-659AF027B596}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Overlord", "Overlord\Overlord.vcxproj", "{C12DA5D8-A59A-473F-AD29-1E6B6F477D6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{72DA7EEC-B4BA-43B0-9560-127B7FCD50EA}.Debug|x64.Build.0 = Debug|x64
 		{72DA7EEC-B4BA-43B0-9560-127B7FCD50EA}.Release|x64.ActiveCfg = Release|x64
 		{72DA7EEC-B4BA-43B0-9560-127B7FCD50EA}.Release|x64.Build.0 = Release|x64
-		{9DB19EA1-8CD7-4BF2-8FD7-659AF027B596}.Debug|x64.ActiveCfg = Debug|x64
-		{9DB19EA1-8CD7-4BF2-8FD7-659AF027B596}.Debug|x64.Build.0 = Debug|x64
-		{9DB19EA1-8CD7-4BF2-8FD7-659AF027B596}.Release|x64.ActiveCfg = Debug|x64
-		{9DB19EA1-8CD7-4BF2-8FD7-659AF027B596}.Release|x64.Build.0 = Debug|x64
+		{C12DA5D8-A59A-473F-AD29-1E6B6F477D6C}.Debug|x64.ActiveCfg = Debug|x64
+		{C12DA5D8-A59A-473F-AD29-1E6B6F477D6C}.Debug|x64.Build.0 = Debug|x64
+		{C12DA5D8-A59A-473F-AD29-1E6B6F477D6C}.Release|x64.ActiveCfg = Release|x64
+		{C12DA5D8-A59A-473F-AD29-1E6B6F477D6C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
