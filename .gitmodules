@@ -1,0 +1,3 @@
+[submodule "Overlord/vendor/spdlog"]
+	path = Overlord/vendor/spdlog
+	url = https://github.com/gabime/spdlog.git

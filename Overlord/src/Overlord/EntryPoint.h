@@ -4,8 +4,12 @@
 
 extern Overlord::Application* Overlord::CreateApplication();
 
-int main(int argc, char** argv)
+int main()
 {
+	Overlord::Log::Init();
+	OLD_CORE_WARN("Initialized Log!");
+	OLD_INFO("Hello!");
+
 	auto app = Overlord::CreateApplication();
 	app->Run();
 	delete app;
@@ -13,4 +17,4 @@ int main(int argc, char** argv)
 
 #else
 	#error Overlord only support Windows
-#endif // HZ_PLATFORM_WINDOWS
+#endif // OLD_PLATFORM_WINDOWS

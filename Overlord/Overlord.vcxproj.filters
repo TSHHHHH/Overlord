@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Overlord">
+      <UniqueIdentifier>{920D41D3-7EDA-9BDE-A7F3-8986931FD16C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Overlord\Events">
+      <UniqueIdentifier>{3681F160-A20C-5F25-AB1D-E2191728BB25}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Overlord.h" />
+    <ClInclude Include="src\Overlord\Application.h">
+      <Filter>Overlord</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Overlord\EntryPoint.h">
+      <Filter>Overlord</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Overlord\Events\ApplicationEvent.h">
+      <Filter>Overlord\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Overlord\Events\Event.h">
+      <Filter>Overlord\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Overlord\Events\KeyEvent.h">
+      <Filter>Overlord\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Overlord\Events\MouseEvent.h">
+      <Filter>Overlord\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Overlord\Log.h">
+      <Filter>Overlord</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Overlord\core.h">
+      <Filter>Overlord</Filter>
+    </ClInclude>
+    <ClInclude Include="src\oldpch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Overlord\Application.cpp">
+      <Filter>Overlord</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Overlord\Log.cpp">
+      <Filter>Overlord</Filter>
+    </ClCompile>
+    <ClCompile Include="src\oldpch.cpp" />
+  </ItemGroup>
+</Project>

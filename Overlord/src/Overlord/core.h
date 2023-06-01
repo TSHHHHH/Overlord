@@ -4,8 +4,10 @@
 	#ifdef OLD_BUILD_DLL
 		#define OLD_API __declspec(dllexport)
 	#else
-		#define OLD_APT __declspec(dllimport)
+		#define OLD_API __declspec(dllimport)
 	#endif
 #else
 	#error Overlord only support Windows
-#endif // OLD_PLATFORM_WINDOWS
+#endif
+
+#define BIT(x) (1 << x)
