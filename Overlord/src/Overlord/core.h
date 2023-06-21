@@ -10,4 +10,27 @@
 	#error Overlord only support Windows
 #endif
 
+#ifdef  OLD_ENABLE_ASSERTS
+	#define OLD_ASSERT(x, ...) 
+		{ 
+			if (!(x))
+			{
+				OLD_ERROR("Assertion Failed: {0}", __VA_ARGS__);
+				__debugbreak();
+			}
+		}
+	#define OLD_CORE_ASSERT(x, ...) 
+		{
+			if (!(x))
+			{
+				OLD_ERROR("Assertion Failed: {0}", __VA_ARGS__);
+				__debugbreak();
+			}
+		}
+#else
+	#define OLD_ASSERT(x, ...)
+	#define OLD_CORE_ASSERT(x, ...)
+#endif //  OLD_ENABLE_ASSERTS
+
+
 #define BIT(x) (1 << x)

@@ -12,6 +12,12 @@ workspace "Overlord_Engine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
+IncludeDir = {}
+IncludeDir["GLFW"] = "Overlord/vendor/GLFW/include"
+
+include "Overlord/vendor/GLFW"
+
 project "Overlord"
     location "Overlord"
     kind "SharedLib"
@@ -33,7 +39,16 @@ project "Overlord"
     includedirs
     {
         "%{prj.name}/vendor/spdlog/include",
-        "%{prj.name}/src"
+        "%{prj.name}/src",
+        "%{IncludeDir.GLFW}"
+    }
+
+    links
+    {
+        "GLFW",
+        "opengl32.lib",
+        "dwmapi.lib",
+        "gdi32.lib"
     }
 
     filter "system:windows"
@@ -54,14 +69,17 @@ project "Overlord"
 
     filter "configurations:Debug"
         defines "OLD_DEBUG"
+        buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Release"
         defines "OLD_RELEASE"
+        buildoptions "/MD"
         optimize "On"
 
     filter "configurations:Dist"
         defines "OLD_DIST"
+        buildoptions "/MD"
         optimize "On"
 
 project "Sandbox"
@@ -102,12 +120,15 @@ project "Sandbox"
 
     filter "configurations:Debug"
         defines "OLD_DEBUG"
+        buildoptions "/MDd"
         symbols "On"
 
     filter "configurations:Release"
         defines "OLD_RELEASE"
+        buildoptions "/MD"
         optimize "On"
 
     filter "configurations:Dist"
         defines "OLD_DIST"
+        buildoptions "/MD"
         optimize "On"

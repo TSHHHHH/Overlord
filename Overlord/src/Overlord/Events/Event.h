@@ -41,6 +41,8 @@ namespace Overlord
 		virtual int GetCategoryFlags() const = 0;
 		virtual std::string ToString() const { return GetName(); }
 
+		bool isHandled() const { return m_Handled; }
+
 		inline bool IsInCategory(EventCategory category)
 		{
 			return GetCategoryFlags() & category;
