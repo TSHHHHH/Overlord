@@ -33,6 +33,6 @@ namespace Overlord
 		LayerStack m_LayerStack;
 	};
 
-	// To be define in client
+	// To be defined in client
 	Application* CreateApplication();
 }

@@ -32,5 +32,4 @@
 	#define OLD_CORE_ASSERT(x, ...)
 #endif //  OLD_ENABLE_ASSERTS
 
-
 #define BIT(x) (1 << x)

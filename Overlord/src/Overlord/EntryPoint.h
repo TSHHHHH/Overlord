@@ -6,12 +6,15 @@ extern Overlord::Application* Overlord::CreateApplication();
 
 int main()
 {
+	// Init logging system
 	Overlord::Log::Init();
 	OLD_CORE_WARN("Initialized Log!");
-	OLD_INFO("Hello!");
 
+	// Init application
 	auto app = Overlord::CreateApplication();
+
 	app->Run();
+
 	delete app;
 }
 

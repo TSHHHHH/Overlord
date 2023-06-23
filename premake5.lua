@@ -15,8 +15,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Overlord/vendor/GLFW/include"
+IncludeDir["Glad"] = "Overlord/vendor/Glad/include"
 
 include "Overlord/vendor/GLFW"
+include "Overlord/vendor/Glad"
 
 project "Overlord"
     location "Overlord"
@@ -40,12 +42,14 @@ project "Overlord"
     {
         "%{prj.name}/vendor/spdlog/include",
         "%{prj.name}/src",
-        "%{IncludeDir.GLFW}"
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.Glad}"
     }
 
     links
     {
         "GLFW",
+        "Glad",
         "opengl32.lib",
         "dwmapi.lib",
         "gdi32.lib"
@@ -53,13 +57,13 @@ project "Overlord"
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
         systemversion "latest"
 
         defines
         {
             "OLD_PLATFORM_WINDOWS",
-            "OLD_BUILD_DLL"
+            "OLD_BUILD_DLL",
+            "GLFW_INCLUDE_NONE"
         }
 
         postbuildcommands
@@ -110,7 +114,6 @@ project "Sandbox"
 
     filter "system:windows"
         cppdialect "C++17"
-        staticruntime "On"
         systemversion "latest"
 
         defines

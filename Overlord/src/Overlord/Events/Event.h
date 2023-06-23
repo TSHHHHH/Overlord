@@ -30,7 +30,6 @@ namespace Overlord
 
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
-
 	class OLD_API Event
 	{
 		friend class EventDispatcher;
