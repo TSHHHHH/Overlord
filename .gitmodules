@@ -4,3 +4,6 @@
 [submodule "Overlord/vendor/GLFW"]
 	path = Overlord/vendor/GLFW
 	url = https://github.com/TSHHHHH/glfw.git
+[submodule "Overlord/vendor/imgui"]
+	path = Overlord/vendor/imgui
+	url = https://github.com/ocornut/imgui.git
