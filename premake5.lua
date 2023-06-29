@@ -1,6 +1,7 @@
 -- premake5.lua
 workspace "Overlord_Engine"
     architecture "x64"
+
     startproject "Sandbox"
 
     configurations
@@ -27,6 +28,8 @@ project "Overlord"
     kind "SharedLib"
 
     language "C++"
+
+    staticruntime "off"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -72,22 +75,22 @@ project "Overlord"
 
         postbuildcommands
         {
-            ("{COPYDIR} %{cfg.buildtarget.relpath} ../bin/" .. outputdir .. "/Sandbox")
+            ("{COPYDIR} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox\"")
         }
 
     filter "configurations:Debug"
         defines "OLD_DEBUG"
-        buildoptions "/MDd"
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines "OLD_RELEASE"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"
 
     filter "configurations:Dist"
         defines "OLD_DIST"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"
 
 project "Sandbox"
@@ -95,6 +98,8 @@ project "Sandbox"
     kind "ConsoleApp"
 
     language "C++"
+
+    staticruntime "off"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -127,15 +132,15 @@ project "Sandbox"
 
     filter "configurations:Debug"
         defines "OLD_DEBUG"
-        buildoptions "/MDd"
+        runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
         defines "OLD_RELEASE"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"
 
     filter "configurations:Dist"
         defines "OLD_DIST"
-        buildoptions "/MD"
+        runtime "Release"
         optimize "On"
