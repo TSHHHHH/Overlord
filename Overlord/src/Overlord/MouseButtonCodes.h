@@ -1,0 +1,15 @@
+#pragma once
+
+// From glfw3.h
+#define OVLD_MOUSE_BUTTON_1         0
+#define OVLD_MOUSE_BUTTON_2         1
+#define OVLD_MOUSE_BUTTON_3         2
+#define OVLD_MOUSE_BUTTON_4         3
+#define OVLD_MOUSE_BUTTON_5         4
+#define OVLD_MOUSE_BUTTON_6         5
+#define OVLD_MOUSE_BUTTON_7         6
+#define OVLD_MOUSE_BUTTON_8         7
+#define OVLD_MOUSE_BUTTON_LAST      OVLD_MOUSE_BUTTON_8
+#define OVLD_MOUSE_BUTTON_LEFT      OVLD_MOUSE_BUTTON_1
+#define OVLD_MOUSE_BUTTON_RIGHT     OVLD_MOUSE_BUTTON_2
+#define OVLD_MOUSE_BUTTON_MIDDLE    OVLD_MOUSE_BUTTON_3
