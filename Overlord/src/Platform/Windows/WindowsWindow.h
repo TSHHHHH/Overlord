@@ -22,8 +22,14 @@ namespace Overlord
 		{
 			m_Data.EventCallback = callback;
 		}
+
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
+
+		inline virtual void* GetNativeWindow() const
+		{
+			return m_Window;
+		}
 
 	private:
 		virtual void Init(const WindowProps& props);
@@ -39,7 +45,6 @@ namespace Overlord
 
 			EventCallbackFn EventCallback;
 		};
-
 		WindowData m_Data;
 	};
 }
