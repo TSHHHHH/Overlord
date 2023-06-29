@@ -10,7 +10,7 @@ namespace Overlord
 		None = 0,
 		Window_Close, Window_Resize, Window_Focus, Window_LostFocus, Window_Moved,
 		App_Tick, App_Update, App_Render,
-		Key_Pressed, Key_Released,
+		Key_Pressed, Key_Released, Key_Typed,
 		MouseButton_Pressed, MouseButton_Released, Mouse_Moved, Mouse_Scrolled
 	};
 

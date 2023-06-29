@@ -33,3 +33,5 @@
 #endif //  OLD_ENABLE_ASSERTS
 
 #define BIT(x) (1 << x)
+
+#define OLD_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)

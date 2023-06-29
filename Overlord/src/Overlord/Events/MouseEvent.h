@@ -37,8 +37,8 @@ namespace Overlord
 		{
 		}
 
-		inline float GetX() const { return m_XOffset; }
-		inline float GetY() const { return m_YOffset; }
+		inline float GetXoffset() const { return m_XOffset; }
+		inline float GetYoffset() const { return m_YOffset; }
 
 		std::string ToString() const override
 		{

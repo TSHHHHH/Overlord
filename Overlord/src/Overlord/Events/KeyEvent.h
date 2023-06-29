@@ -54,10 +54,31 @@ namespace Overlord
 		std::string ToString() const override
 		{
 			std::stringstream ss;
+
 			ss << "KeyReleasedEvent: " << m_KeyCode;
+
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(Key_Released)
+		EVENT_CLASS_TYPE (Key_Released)
+	};
+
+	class OLD_API KeyTypedEvent : public KeyEvent
+	{
+	public:
+		// Constructor
+		KeyTypedEvent(int keycode)
+			: KeyEvent(keycode) { }
+
+		std::string ToString() const override
+		{
+			std::stringstream ss;
+
+			ss << "KeyTypedEvent: " << m_KeyCode;
+
+			return ss.str();
+		}
+
+		EVENT_CLASS_TYPE(Key_Typed)
 	};
 }
