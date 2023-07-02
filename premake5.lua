@@ -15,9 +15,10 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"] = "Overlord/vendor/GLFW/include"
-IncludeDir["Glad"] = "Overlord/vendor/Glad/include"
+IncludeDir["GLFW"]  = "Overlord/vendor/GLFW/include"
+IncludeDir["Glad"]  = "Overlord/vendor/Glad/include"
 IncludeDir["ImGui"] = "Overlord/vendor/imgui"
+IncludeDir["glm"]   = "Overlord/vendor/glm"
 
 include "Overlord/vendor/GLFW"
 include "Overlord/vendor/Glad"
@@ -40,7 +41,9 @@ project "Overlord"
     files
     {
         "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
+        "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/glm/glm/**.hpp",
+        "%{prj.name}/vendor/glm/glm/**.inl"
     }
 
     includedirs
@@ -50,6 +53,7 @@ project "Overlord"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.glm}"
     }
 
     links
@@ -113,7 +117,8 @@ project "Sandbox"
     includedirs
     {
         "Overlord/vendor/spdlog/include",
-        "Overlord/src"
+        "Overlord/src",
+        "%{IncludeDir.glm}"
     }
 
     links
