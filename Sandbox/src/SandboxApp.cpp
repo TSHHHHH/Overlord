@@ -1,5 +1,7 @@
 #include <Overlord.h>
 
+#include "imgui/imgui.h"
+
 class ExampleLayer : public Overlord::Layer
 {
 public:
@@ -17,9 +19,16 @@ public:
 		}
 	}
 
+	void OnImGuiRender() override
+	{
+		ImGui::Begin("Test");
+		ImGui::Text("Hello World.");
+		ImGui::End();
+	}
+
 	void OnEvent(Overlord::Event& event) override
 	{
-		// OLD_TRACE("{0}", event);
+		
 	}
 };
 
@@ -29,7 +38,7 @@ public:
 	SandBox()
 	{
 		PushLayer(new ExampleLayer());
-		PushOverlay(new Overlord::ImGuiLayer());
+		// PushOverlay(new Overlord::ImGuiLayer());
 	}
 
 	~SandBox()

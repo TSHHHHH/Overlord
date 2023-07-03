@@ -118,6 +118,7 @@ project "Sandbox"
     {
         "Overlord/vendor/spdlog/include",
         "Overlord/src",
+        "Overlord/vendor",
         "%{IncludeDir.glm}"
     }
 

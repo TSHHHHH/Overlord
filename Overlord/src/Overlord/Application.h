@@ -9,6 +9,8 @@
 #include "Events/Event.h"
 #include "Events/ApplicationEvent.h"
 
+#include "Overlord/ImGui/ImGuiLayer.h"
+
 namespace Overlord
 {
 	class OLD_API Application
@@ -36,6 +38,7 @@ namespace Overlord
 		static Application* s_Instance;
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 
 		LayerStack m_LayerStack;
 	};

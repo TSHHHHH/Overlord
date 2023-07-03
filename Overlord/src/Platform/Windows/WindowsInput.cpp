@@ -15,7 +15,7 @@ namespace Overlord
 
 		int state = glfwGetKey(window, keycode);
 
-		return state == (GLFW_PRESS || GLFW_REPEAT);
+		return (bool)(state == (GLFW_PRESS || GLFW_REPEAT));
 	}
 
 	bool WindowsInput::IsMouseButtonPressedImpl(int mouseButton)
