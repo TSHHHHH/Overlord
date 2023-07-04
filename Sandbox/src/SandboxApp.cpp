@@ -13,15 +13,12 @@ public:
 
 	void OnUpdate() override
 	{
-		//if (Overlord::Input::IsKeyPressed(OVLD_KEY_TAB))
-		//{
-		//	OLD_TRACE("Tab key is pressed");
-		//}
+		
 	}
 
 	void OnImGuiRender() override
 	{
-		ImGui::Begin("Test");
+		ImGui::Begin("Test ImGui Window");
 		ImGui::Text("Hello World.");
 		ImGui::Button("Click");
 		ImGui::End();
@@ -30,7 +27,7 @@ public:
 	void OnEvent(Overlord::Event& event) override
 	{
 		// Debug
-		OLD_TRACE("{0}", event.GetName());
+		//OLD_TRACE("{0}", event.GetName());
 	}
 };
 
@@ -40,7 +37,6 @@ public:
 	SandBox()
 	{
 		PushLayer(new ExampleLayer());
-		// PushOverlay(new Overlord::ImGuiLayer());
 	}
 
 	~SandBox()
