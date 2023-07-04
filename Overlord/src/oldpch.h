@@ -14,4 +14,6 @@
 
 #ifdef OLD_PLATFORM_WINDOWS
 	#include <Windows.h>
-#endif // OLD_PLATFORM_WINDOWS
+#endif
+
+#include "Overlord/Log.h"
