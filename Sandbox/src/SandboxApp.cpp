@@ -13,22 +13,24 @@ public:
 
 	void OnUpdate() override
 	{
-		if (Overlord::Input::IsKeyPressed(OVLD_KEY_TAB))
-		{
-			OLD_TRACE("Tab key is pressed");
-		}
+		//if (Overlord::Input::IsKeyPressed(OVLD_KEY_TAB))
+		//{
+		//	OLD_TRACE("Tab key is pressed");
+		//}
 	}
 
 	void OnImGuiRender() override
 	{
 		ImGui::Begin("Test");
 		ImGui::Text("Hello World.");
+		ImGui::Button("Click");
 		ImGui::End();
 	}
 
 	void OnEvent(Overlord::Event& event) override
 	{
-		
+		// Debug
+		OLD_TRACE("{0}", event.GetName());
 	}
 };
 

@@ -8,14 +8,13 @@ namespace Overlord
 {
 	Input* Input::s_Instance = new WindowsInput();
 
-
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
 		int state = glfwGetKey(window, keycode);
 
-		return (bool)(state == (GLFW_PRESS || GLFW_REPEAT));
+		return (state == GLFW_PRESS) || (state == GLFW_REPEAT);
 	}
 
 	bool WindowsInput::IsMouseButtonPressedImpl(int mouseButton)

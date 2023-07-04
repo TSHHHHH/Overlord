@@ -26,11 +26,12 @@ include "Overlord/vendor/imgui"
 
 project "Overlord"
     location "Overlord"
-    kind "SharedLib"
+
+    kind "StaticLib"
+    staticruntime "On"
 
     language "C++"
-
-    staticruntime "off"
+    cppdialect "C++17"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -44,6 +45,11 @@ project "Overlord"
         "%{prj.name}/src/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.inl"
+    }
+
+    defines
+    {
+        "_CRT_SECURE_NO_WARNINGS" -- For functions from ImGui (sscanf, strcat, strcpy)
     }
 
     includedirs
@@ -61,13 +67,14 @@ project "Overlord"
         "GLFW",
         "Glad",
         "ImGui",
-        "opengl32.lib",
-        "dwmapi.lib",
-        "gdi32.lib"
+        "opengl32.lib"
+        
+        -- Uncomment these if using dynamic library
+        -- "dwmapi.lib",
+        -- "gdi32.lib"
     }
 
     filter "system:windows"
-        cppdialect "C++17"
         systemversion "latest"
 
         defines
@@ -77,33 +84,29 @@ project "Overlord"
             "GLFW_INCLUDE_NONE"
         }
 
-        postbuildcommands
-        {
-            ("{COPYDIR} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox\"")
-        }
-
     filter "configurations:Debug"
         defines "OLD_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "OLD_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "OLD_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
 project "Sandbox"
     location "Sandbox"
+
     kind "ConsoleApp"
+    staticruntime "on"
 
     language "C++"
-
-    staticruntime "off"
+    cppdialect "C++17"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -128,7 +131,6 @@ project "Sandbox"
     }
 
     filter "system:windows"
-        cppdialect "C++17"
         systemversion "latest"
 
         defines
@@ -139,14 +141,14 @@ project "Sandbox"
     filter "configurations:Debug"
         defines "OLD_DEBUG"
         runtime "Debug"
-        symbols "On"
+        symbols "on"
 
     filter "configurations:Release"
         defines "OLD_RELEASE"
         runtime "Release"
-        optimize "On"
+        optimize "on"
 
     filter "configurations:Dist"
         defines "OLD_DIST"
         runtime "Release"
-        optimize "On"
+        optimize "on"

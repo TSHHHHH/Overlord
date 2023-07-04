@@ -1,10 +1,14 @@
 #pragma once
 
 #ifdef OLD_PLATFORM_WINDOWS
-	#ifdef OLD_BUILD_DLL
-		#define OLD_API __declspec(dllexport)
+	#if OLD_DYNAMIC_LINK
+		#ifdef OLD_BUILD_DLL
+			#define OLD_API __declspec(dllexport)
+		#else
+			#define OLD_API __declspec(dllimport)
+		#endif
 	#else
-		#define OLD_API __declspec(dllimport)
+		#define OLD_API
 	#endif
 #else
 	#error Overlord only support Windows

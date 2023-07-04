@@ -80,6 +80,7 @@ namespace Overlord
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 
+		// Set display dimension base on the widnow
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
 		// Rendering
