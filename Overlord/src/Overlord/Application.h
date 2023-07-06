@@ -11,6 +11,9 @@
 
 #include "Overlord/ImGui/ImGuiLayer.h"
 
+#include "Overlord/Renderer/Buffer.h"
+#include "Overlord/Renderer/Shader.h"
+
 namespace Overlord
 {
 	class OLD_API Application
@@ -41,6 +44,12 @@ namespace Overlord
 		ImGuiLayer* m_ImGuiLayer;
 
 		LayerStack m_LayerStack;
+
+		// Rendering Components
+		unsigned int m_VertexArray;
+		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 	};
 
 	// To be defined in client

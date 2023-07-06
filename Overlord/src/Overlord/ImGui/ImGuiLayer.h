@@ -6,8 +6,15 @@
 #include "Overlord/Events/KeyEvent.h"
 #include "Overlord/Events/MouseEvent.h"
 
+// Temp
+//#include <glm/glm.hpp>
+
 namespace Overlord
 {
+	// Temp
+	//extern glm::vec3 position;
+	//extern glm::vec3 color;
+
 	class OLD_API ImGuiLayer : public Layer
 	{
 	public:
