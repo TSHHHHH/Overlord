@@ -1,13 +1,9 @@
 #include "oldpch.h"
 #include "WindowsWindow.h"
 
-#include "Overlord/Log.h"
-
 #include "Overlord/Events/KeyEvent.h"
 #include "Overlord/Events/MouseEvent.h"
 #include "Overlord/Events/ApplicationEvent.h"
-
-#include <glad/glad.h>
 
 namespace Overlord
 {
@@ -53,11 +49,8 @@ namespace Overlord
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		
-		glfwMakeContextCurrent(m_Window);
-
-		// glad init
-		int gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		OLD_CORE_ASSERT(gladStatus, "Failed to initialize Glad!!");
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetVSync(true);
@@ -163,7 +156,7 @@ namespace Overlord
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffer();
 	}
 
 	void WindowsWindow::SetVSync(bool enabled)

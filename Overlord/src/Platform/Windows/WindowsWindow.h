@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Overlord/Window.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -36,6 +37,7 @@ namespace Overlord
 		virtual void ShutDown();
 
 		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{
