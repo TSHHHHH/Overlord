@@ -7,15 +7,8 @@
 
 #include "Input.h"
 
-// Temp
-//#include <glm/glm.hpp>
-
 namespace Overlord
 {
-	// Temp
-	//glm::vec3 position;
-	//glm::vec3 color;
-
 	Application* Application::s_Instance = nullptr;
 
 	// ==================================================================
@@ -176,8 +169,6 @@ namespace Overlord
 
 			// Rendering
 			m_Shader->Use();
-			//m_Shader->SetVec3("position_byImGui", position);
-			//m_Shader->SetVec3("color_byImGui", color);
 
 			glBindVertexArray(m_VertexArray);
 			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);

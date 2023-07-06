@@ -73,12 +73,6 @@ namespace Overlord
 		// Display demo window
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
-
-		// SH's ImGui window
-		//ImGui::Begin("Position/Color Picker");
-		//ImGui::SliderFloat2("position", &position[0], -1.0, 1.0);
-		//ImGui::ColorEdit3("color", &color[0]);
-		//ImGui::End();
 	}
 
 	void ImGuiLayer::End()
