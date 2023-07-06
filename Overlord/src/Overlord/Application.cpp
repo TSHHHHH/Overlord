@@ -1,8 +1,6 @@
 #include "oldpch.h"
 #include "Application.h"
 
-#include "Log.h"
-
 #include <glad/glad.h>
 
 #include "Input.h"
@@ -12,29 +10,6 @@ namespace Overlord
 	Application* Application::s_Instance = nullptr;
 
 	// ==================================================================
-
-	// For glVertexAttribPointer 3rd argument
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-			case ShaderDataType::Float:		return GL_FLOAT;
-			case ShaderDataType::Float2:	return GL_FLOAT;
-			case ShaderDataType::Float3:	return GL_FLOAT;
-			case ShaderDataType::Float4:	return GL_FLOAT;
-			case ShaderDataType::Mat3:		return GL_FLOAT;
-			case ShaderDataType::Mat4:		return GL_FLOAT;
-			case ShaderDataType::Int:		return GL_INT;
-			case ShaderDataType::Int2:		return GL_INT;
-			case ShaderDataType::Int3:		return GL_INT;
-			case ShaderDataType::Int4:		return GL_INT;
-			case ShaderDataType::Bool:		return GL_BOOL;
-		}
-
-		OLD_CORE_ASSERT(false, "Unknow Shader Data Type!!");
-		return 0;
-	}
-
 	// Definitions
 	Application::Application()
 	{
@@ -49,8 +24,7 @@ namespace Overlord
 
 		// ==================================================================
 		// Create Rendering Components
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
+		m_VertexArray.reset(VertexArray::Create());
 
 		float vertices[3 * 7] = {
 			// Vertex Pos		// Color
@@ -58,33 +32,42 @@ namespace Overlord
 			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
 			 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
 		};
-
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer> VB(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		BufferLayout layout = {
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color" },
 		};
+		VB->SetLayout(layout);
 
-		m_VertexBuffer->SetLayout(layout);
-
-		// Set vertex attributes with for range loop
-		uint32_t index = 0;
-		for (const auto& element : m_VertexBuffer->GetLayout())
-		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index,
-				element.GetComponentCount(), 
-				ShaderDataTypeToOpenGLBaseType(element.Type), 
-				element.isNormalized ? GL_TRUE : GL_FALSE, 
-				m_VertexBuffer->GetLayout().GetStride(),
-				(const void*)element.Offset);
-
-			++index;
-		}
+		m_VertexArray->AddVertexBuffer(VB);
 
 		uint32_t indices[3] = { 0,1,2 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		std::shared_ptr<IndexBuffer> IB(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+
+		m_VertexArray->SetIndexBuffer(IB);
+
+		// Try to render a square
+		m_VA_Square.reset(VertexArray::Create());
+
+		float vertices_square[3 * 4] = {
+			// Vertex Pos
+			-0.75f, -0.75f, 0.0f,
+			 0.75f, -0.75f, 0.0f,
+			 0.75f,  0.75f, 0.0f,
+			-0.75f,  0.75f, 0.0f
+		};
+
+		std::shared_ptr<VertexBuffer> VB_Square(VertexBuffer::Create(vertices_square, sizeof(vertices_square)));
+
+		VB_Square->SetLayout({
+			{ ShaderDataType::Float3, "a_Position" }
+		});
+		m_VA_Square->AddVertexBuffer(VB_Square);
+
+		uint32_t indices_square[6] = { 0, 1, 2, 2, 3, 0 };
+		std::shared_ptr<IndexBuffer> m_IB_Square(IndexBuffer::Create(indices_square, sizeof(indices_square) / sizeof(uint32_t)));
+		m_VA_Square->SetIndexBuffer(m_IB_Square);
 
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -123,6 +106,35 @@ namespace Overlord
 		)";
 
 		m_Shader.reset(new Shader(vertexSrc, FragmentSrc));
+
+		std::string vertexSrc_Blue = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Position;
+
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string FragmentSrc_Blue = R"(
+			#version 330 core
+
+			in vec3 v_Position;
+
+			layout(location = 0) out vec4 color;
+
+			void main()
+			{
+				color = vec4(0.2, 0.3, 0.8, 1.0);
+			}
+		)";
+
+		m_Shader_Blue.reset(new Shader(vertexSrc_Blue, FragmentSrc_Blue));
 
 		// ==================================================================
 	}
@@ -168,16 +180,19 @@ namespace Overlord
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			// Rendering
-			m_Shader->Use();
+			m_Shader_Blue->Use();
+			m_VA_Square->Bind();
+			glDrawElements(GL_TRIANGLES, m_VA_Square->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_Shader->Use();
+			m_VertexArray->Bind();
+			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 			// Normal Layer system update
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
 
-			// ImGui layer system update
+			// ImGui layer system ImGui render
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)
 				layer->OnImGuiRender();
