@@ -121,11 +121,6 @@ namespace Overlord
 		glDeleteProgram(m_ProgramID);
 	}
 
-	void Shader::SetVec3(const std::string& name, const glm::vec3& vec3) const
-	{
-		glUniform3fv(glGetUniformLocation(m_ProgramID, name.c_str()), 1, &vec3[0]);
-	}
-
 	void Shader::Use() const
 	{
 		glUseProgram(m_ProgramID);
@@ -134,5 +129,10 @@ namespace Overlord
 	void Shader::Unuse() const
 	{
 		glUseProgram(0);
+	}
+
+	void Shader::SetVec3(const std::string& name, const glm::vec3& vec3) const
+	{
+		glUniform3fv(glGetUniformLocation(m_ProgramID, name.c_str()), 1, &vec3[0]);
 	}
 }
