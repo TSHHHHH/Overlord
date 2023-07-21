@@ -27,7 +27,7 @@ public:
 	void OnEvent(Overlord::Event& event) override
 	{
 		// Debug
-		//OLD_TRACE("{0}", event.GetName());
+		OLD_TRACE("{0}", event.GetName());
 	}
 };
 

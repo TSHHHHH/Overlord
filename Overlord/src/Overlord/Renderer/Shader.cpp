@@ -2,6 +2,7 @@
 #include "Shader.h"
 
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 
 namespace Overlord
 {
@@ -134,5 +135,10 @@ namespace Overlord
 	void Shader::SetVec3(const std::string& name, const glm::vec3& vec3) const
 	{
 		glUniform3fv(glGetUniformLocation(m_ProgramID, name.c_str()), 1, &vec3[0]);
+	}
+
+	void Shader::SetMat4(const std::string& name, const glm::mat4& mat4) const
+	{
+		glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat4));
 	}
 }

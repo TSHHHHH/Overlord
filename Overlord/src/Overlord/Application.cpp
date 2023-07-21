@@ -1,9 +1,10 @@
 #include "oldpch.h"
 #include "Application.h"
 
-#include <glad/glad.h>
+#include "Overlord/Renderer/Renderer.h"
 
 #include "Input.h"
+#include "KeyCodes.h"
 
 namespace Overlord
 {
@@ -12,6 +13,7 @@ namespace Overlord
 	// ==================================================================
 	// Definitions
 	Application::Application()
+		: m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 	{
 		OLD_CORE_ASSERT(!s_Instance, "Application already exists!!");
 		s_Instance = this;
@@ -79,13 +81,14 @@ namespace Overlord
 			out vec4 v_Color;
 
 			uniform vec3 position_byImGui;
+			uniform mat4 u_ViewProjection;
 
 			void main()
 			{
 				v_Position = a_Position;
 				v_Color = a_Color;
 
-				gl_Position = vec4(a_Position + position_byImGui, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -112,12 +115,14 @@ namespace Overlord
 
 			layout(location = 0) in vec3 a_Position;
 
+			uniform mat4 u_ViewProjection;
+
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -162,6 +167,7 @@ namespace Overlord
 
 		// Dispatch window close event to trigger close function
 		dispatcher.Dispatch<WindowCloseEvent>(OLD_BIND_EVENT_FN(Application::OnWindowClose));
+		dispatcher.Dispatch<KeyPressedEvent>(OLD_BIND_EVENT_FN(Application::OnInput));
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{
@@ -176,17 +182,19 @@ namespace Overlord
 		while (m_Running)
 		{
 			// Render a background color
-			glClearColor(0.14f, 0.14f, 0.14f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 0.14f, 0.14f, 0.14f, 1.0f });
+			RenderCommand::Clear();
 
 			// Rendering
-			m_Shader_Blue->Use();
-			m_VA_Square->Bind();
-			glDrawElements(GL_TRIANGLES, m_VA_Square->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			m_Camera.SetRotation(m_roatation);
 
-			m_Shader->Use();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::BeginScene(m_Camera);
+
+			Renderer::Submit(m_Shader_Blue, m_VA_Square);
+
+			Renderer::Submit(m_Shader, m_VertexArray);
+
+			Renderer::EndScene();
 
 			// Normal Layer system update
 			for (Layer* layer : m_LayerStack)
@@ -205,6 +213,20 @@ namespace Overlord
 	bool Application::OnWindowClose(WindowCloseEvent& event)
 	{
 		m_Running = false;
+		return true;
+	}
+
+	bool Application::OnInput(KeyPressedEvent& event)
+	{
+		if (event.GetKeyCode() == OVLD_KEY_W)
+		{
+			++m_roatation;
+		}
+		else if (event.GetKeyCode() == OVLD_KEY_S)
+		{
+			--m_roatation;
+		}
+
 		return true;
 	}
 }

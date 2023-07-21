@@ -15,6 +15,8 @@
 #include "Overlord/Renderer/VertexArray.h"
 #include "Overlord/Renderer/Buffer.h"
 
+#include "Overlord/Renderer/OrthographicCamera.h"
+
 namespace Overlord
 {
 	class OLD_API Application
@@ -36,6 +38,7 @@ namespace Overlord
 
 	private:
 		bool OnWindowClose(WindowCloseEvent& event);
+		bool OnInput(KeyPressedEvent& event);
 
 		bool m_Running = true;
 
@@ -52,6 +55,10 @@ namespace Overlord
 
 		std::shared_ptr<Shader>			m_Shader_Blue;
 		std::shared_ptr<VertexArray>	m_VA_Square;
+
+		OrthographicCamera m_Camera;
+
+		float m_roatation = 0.f;
 	};
 
 	// To be defined in client
