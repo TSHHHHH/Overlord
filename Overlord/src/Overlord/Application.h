@@ -11,15 +11,11 @@
 
 #include "Overlord/ImGui/ImGuiLayer.h"
 
-#include "Overlord/Renderer/Shader.h"
-#include "Overlord/Renderer/VertexArray.h"
-#include "Overlord/Renderer/Buffer.h"
-
-#include "Overlord/Renderer/OrthographicCamera.h"
+#include "Overlord/Core/Timestep.h"
 
 namespace Overlord
 {
-	class OLD_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -36,29 +32,22 @@ namespace Overlord
 
 		inline Window& GetWindow() { return *m_Window; }
 
+	// private functions
 	private:
 		bool OnWindowClose(WindowCloseEvent& event);
-		bool OnInput(KeyPressedEvent& event);
+
+	// private data member
+	private:
+		static Application* s_Instance;
 
 		bool m_Running = true;
-
-		static Application* s_Instance;
 
 		std::unique_ptr<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 
 		LayerStack m_LayerStack;
 
-		// Rendering Components
-		std::shared_ptr<Shader>			m_Shader;
-		std::shared_ptr<VertexArray>	m_VertexArray;
-
-		std::shared_ptr<Shader>			m_Shader_Blue;
-		std::shared_ptr<VertexArray>	m_VA_Square;
-
-		OrthographicCamera m_Camera;
-
-		float m_roatation = 0.f;
+		float m_LastFrameTime;
 	};
 
 	// To be defined in client

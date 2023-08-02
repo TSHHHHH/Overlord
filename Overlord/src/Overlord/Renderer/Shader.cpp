@@ -134,11 +134,22 @@ namespace Overlord
 
 	void Shader::SetVec3(const std::string& name, const glm::vec3& vec3) const
 	{
-		glUniform3fv(glGetUniformLocation(m_ProgramID, name.c_str()), 1, &vec3[0]);
+		GLint uniformLocation = glGetUniformLocation(m_ProgramID, name.c_str());
+
+		glUniform3fv(uniformLocation, 1, &vec3[0]);
+	}
+
+	void Shader::SetFloat4(const std::string& name, const glm::vec4& vec4) const
+	{
+		GLint uniformLocation = glGetUniformLocation(m_ProgramID, name.c_str());
+
+		glUniform4fv(uniformLocation, 1, &vec4[0]);
 	}
 
 	void Shader::SetMat4(const std::string& name, const glm::mat4& mat4) const
 	{
-		glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat4));
+		GLint uniformLocation = glGetUniformLocation(m_ProgramID, name.c_str());
+
+		glUniformMatrix4fv(uniformLocation, 1, GL_FALSE, glm::value_ptr(mat4));
 	}
 }

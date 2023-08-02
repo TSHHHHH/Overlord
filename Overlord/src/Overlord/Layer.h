@@ -3,10 +3,12 @@
 #include "Overlord/core.h"
 #include "Overlord/Events/Event.h"
 
+#include "Overlord/Core/Timestep.h"
+
 namespace Overlord
 {
 	// Layer base class
-	class OLD_API Layer
+	class Layer
 	{
 	public:
 		Layer(const std::string& name = "Layer");
@@ -14,7 +16,7 @@ namespace Overlord
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep timestep) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& event) {}
 
