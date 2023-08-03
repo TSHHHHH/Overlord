@@ -1,6 +1,8 @@
 #include "oldpch.h"
 #include "Renderer.h"
 
+#include "Platform/OpenGL/OpenGLShader.h"
+
 namespace Overlord
 {
 	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
@@ -18,8 +20,10 @@ namespace Overlord
 	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
 		shader->Use();
-		shader->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
-		shader->SetMat4("u_Transform", transform);
+		// For camera
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
+		// For object transformation
+		std::dynamic_pointer_cast<OpenGLShader>(shader)->SetMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

@@ -35,7 +35,8 @@ namespace Overlord
 		glm::mat4 m_ViewMatrix;
 		glm::mat4 m_ViewProjectionMatrix;
 
-		glm::vec3 m_Postion{};
-		float m_Rotation = 0.0f;
+		glm::vec3 m_Postion;
+
+		float m_Rotation;
 	};
 }

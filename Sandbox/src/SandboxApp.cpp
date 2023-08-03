@@ -4,6 +4,9 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Platform/OpenGL/OpenGLShader.h"
+#include <glm/gtc/type_ptr.hpp>
+
 class ExampleLayer : public Overlord::Layer
 {
 public:
@@ -74,7 +77,7 @@ public:
 				v_Position = a_Position;
 				v_Color = a_Color;
 
-				gl_Position = u_ViewProjection *  u_Transform * vec4(a_Position, 1.0);
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 			}
 		)";
 
@@ -109,7 +112,7 @@ public:
 		//	}
 		//)";
 
-		m_Shader.reset(new Overlord::Shader(vertexSrc, FragmentSrcFlat));
+		m_Shader.reset(Overlord::Shader::Create(vertexSrc, FragmentSrcFlat));
 
 		std::string vertexSrc_Blue = R"(
 			#version 330 core
@@ -144,7 +147,7 @@ public:
 		//	}
 		//)";
 
-		m_Shader_Blue.reset(new Overlord::Shader(vertexSrc_Blue, FragmentSrcFlat));
+		m_Shader_Blue.reset(Overlord::Shader::Create(vertexSrc_Blue, FragmentSrcFlat));
 
 		// ==================================================================
 	}
@@ -154,14 +157,32 @@ public:
 		//Delta time debug
 		//OLD_TRACE("Delta time: {0}s {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
 
-		// Camera rotation input
+		// Camera position + rotation input
+		if (Overlord::Input::IsKeyPressed(OVLD_KEY_A))
+		{
+			m_CameraPosition.x -= 1.f * ts;
+		}
+		else if (Overlord::Input::IsKeyPressed(OVLD_KEY_D))
+		{
+			m_CameraPosition.x += 1.f * ts;
+		}
+
 		if (Overlord::Input::IsKeyPressed(OVLD_KEY_W))
 		{
-			m_roatation += 100.f * ts;
+			m_CameraPosition.y += 1.f * ts;
 		}
 		else if (Overlord::Input::IsKeyPressed(OVLD_KEY_S))
 		{
-			m_roatation -= 100.f * ts;
+			m_CameraPosition.y -= 1.f * ts;
+		}
+
+		if (Overlord::Input::IsKeyPressed(OVLD_KEY_E))
+		{
+			m_CameraRotation += 100.f * ts;
+		}
+		else if (Overlord::Input::IsKeyPressed(OVLD_KEY_Q))
+		{
+			m_CameraRotation -= 100.f * ts;
 		}
 
 		// Square transform input
@@ -188,7 +209,8 @@ public:
 		Overlord::RenderCommand::Clear();
 
 		// Rendering
-		m_Camera.SetRotation(m_roatation);
+		m_Camera.SetPosition(m_CameraPosition);
+		m_Camera.SetRotation(m_CameraRotation);
 
 		Overlord::Renderer::BeginScene(m_Camera);
 
@@ -198,6 +220,14 @@ public:
 		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.f);
 		glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.f);
 
+		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader)->Use();
+		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader)->SetFloat4("u_Color", redColor);
+
+		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Blue)->Use();
+		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Blue)->SetFloat4("u_Color", m_SquareColor);
+
+
+
 		for (int y = 0; y < 20; ++y)
 		{
 			for (int x = 0; x < 20; ++x)
@@ -205,14 +235,14 @@ public:
 				glm::vec3 pos(x * 0.2f, y * 0.2f, 0.f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.f), pos) * scale;
 
-				if (x % 2 == 0)
-				{
-					m_Shader_Blue->SetFloat4("u_Color", redColor);
-				}
-				else
-				{
-					m_Shader_Blue->SetFloat4("u_Color", blueColor);
-				}
+				//if (x % 2 == 0)
+				//{
+				//	std::dynamic_pointer_cast<OpenGLShader>(m_Shader_Blue)->SetFloat4("u_Color", redColor);
+				//}
+				//else
+				//{
+				//	std::dynamic_pointer_cast<OpenGLShader>(m_Shader_Blue)->SetFloat4("u_Color", blueColor);
+				//}
 
 				Overlord::Renderer::Submit(m_Shader_Blue, m_VA_Square, transform);
 			}
@@ -226,8 +256,9 @@ public:
 	void OnImGuiRender() override
 	{
 		ImGui::Begin("Test ImGui Window");
-		ImGui::Text("Hello World.");
-		ImGui::Button("Click");
+
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
+
 		ImGui::End();
 	}
 
@@ -238,6 +269,8 @@ public:
 
 private:
 	// Rendering Components
+	glm::vec4 m_SquareColor = { 0.f, 0.f, 0.f, 1.f };
+
 	std::shared_ptr<Overlord::Shader>			m_Shader;
 	std::shared_ptr<Overlord::VertexArray>		m_VertexArray;
 
@@ -246,7 +279,8 @@ private:
 
 	Overlord::OrthographicCamera m_Camera;
 
-	float m_roatation = 0.f;
+	glm::vec3 m_CameraPosition{ 0.f, 0.f, 0.f };
+	float m_CameraRotation = 0.f;
 
 	glm::vec3 m_SquarePosition;
 };
