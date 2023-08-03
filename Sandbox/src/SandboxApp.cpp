@@ -23,7 +23,7 @@ public:
 			 0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
 			 0.0f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f
 		};
-		std::shared_ptr<Overlord::VertexBuffer> VB(Overlord::VertexBuffer::Create(vertices, sizeof(vertices)));
+		Overlord::Ref<Overlord::VertexBuffer> VB(Overlord::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		Overlord::BufferLayout layout = {
 			{ Overlord::ShaderDataType::Float3, "a_Position" },
@@ -34,7 +34,7 @@ public:
 		m_VertexArray->AddVertexBuffer(VB);
 
 		uint32_t indices[3] = { 0,1,2 };
-		std::shared_ptr<Overlord::IndexBuffer> IB(Overlord::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		Overlord::Ref<Overlord::IndexBuffer> IB(Overlord::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 		m_VertexArray->SetIndexBuffer(IB);
 
@@ -49,7 +49,7 @@ public:
 			-0.75f,  0.75f, 0.0f
 		};
 
-		std::shared_ptr<Overlord::VertexBuffer> VB_Square(Overlord::VertexBuffer::Create(vertices_square, sizeof(vertices_square)));
+		Overlord::Ref<Overlord::VertexBuffer> VB_Square(Overlord::VertexBuffer::Create(vertices_square, sizeof(vertices_square)));
 
 		VB_Square->SetLayout({
 			{ Overlord::ShaderDataType::Float3, "a_Position" }
@@ -57,7 +57,7 @@ public:
 		m_VA_Square->AddVertexBuffer(VB_Square);
 
 		uint32_t indices_square[6] = { 0, 1, 2, 2, 3, 0 };
-		std::shared_ptr<Overlord::IndexBuffer> m_IB_Square(Overlord::IndexBuffer::Create(indices_square, sizeof(indices_square) / sizeof(uint32_t)));
+		Overlord::Ref<Overlord::IndexBuffer> m_IB_Square(Overlord::IndexBuffer::Create(indices_square, sizeof(indices_square) / sizeof(uint32_t)));
 		m_VA_Square->SetIndexBuffer(m_IB_Square);
 
 		std::string vertexSrc = R"(
@@ -271,11 +271,11 @@ private:
 	// Rendering Components
 	glm::vec4 m_SquareColor = { 0.f, 0.f, 0.f, 1.f };
 
-	std::shared_ptr<Overlord::Shader>			m_Shader;
-	std::shared_ptr<Overlord::VertexArray>		m_VertexArray;
+	Overlord::Ref<Overlord::Shader>			m_Shader;
+	Overlord::Ref<Overlord::VertexArray>		m_VertexArray;
 
-	std::shared_ptr<Overlord::Shader>			m_Shader_Blue;
-	std::shared_ptr<Overlord::VertexArray>		m_VA_Square;
+	Overlord::Ref<Overlord::Shader>			m_Shader_Blue;
+	Overlord::Ref<Overlord::VertexArray>		m_VA_Square;
 
 	Overlord::OrthographicCamera m_Camera;
 

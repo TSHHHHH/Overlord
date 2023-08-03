@@ -8,7 +8,7 @@ namespace Overlord
 	class VertexArray
 	{
 	protected:
-		using VertexBufferList = std::vector<std::shared_ptr<VertexBuffer>>;
+		using VertexBufferList = std::vector<Ref<VertexBuffer>>;
 
 	public:
 		virtual ~VertexArray() {}
@@ -16,11 +16,11 @@ namespace Overlord
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
-		virtual void AddVertexBuffer(std::shared_ptr<VertexBuffer>& vertexBuffer) = 0;
-		virtual void SetIndexBuffer(std::shared_ptr<IndexBuffer>& indexBuffer) = 0;
+		virtual void AddVertexBuffer(Ref<VertexBuffer>& vertexBuffer) = 0;
+		virtual void SetIndexBuffer(Ref<IndexBuffer>& indexBuffer) = 0;
 
 		virtual const VertexBufferList& GetVertexBuffers() const = 0;
-		virtual const std::shared_ptr<IndexBuffer>& GetIndexBuffer() const = 0;
+		virtual const Ref<IndexBuffer>& GetIndexBuffer() const = 0;
 
 		static VertexArray* Create();
 	};

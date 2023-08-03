@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #ifdef OLD_PLATFORM_WINDOWS
 	#if OLD_DYNAMIC_LINK
 		#ifdef OLD_BUILD_DLL
@@ -24,8 +26,17 @@
 #else
 	#define OLD_ASSERT(x, ...)
 	#define OLD_CORE_ASSERT(x, ...)
-#endif //  OLD_ENABLE_ASSERTS
+#endif
 
 #define BIT(x) (1 << x)
 
 #define OLD_BIND_EVENT_FN(x) std::bind(&x, this, std::placeholders::_1)
+
+namespace Overlord
+{
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+}

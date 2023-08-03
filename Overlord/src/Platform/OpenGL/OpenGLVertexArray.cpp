@@ -47,7 +47,7 @@ namespace Overlord
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::AddVertexBuffer(std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::AddVertexBuffer(Ref<VertexBuffer>& vertexBuffer)
 	{
 		OLD_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), 
 			"Error! Trying to bind a vertex buffer without a layout!!");
@@ -74,7 +74,7 @@ namespace Overlord
 		m_VertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::SetIndexBuffer(std::shared_ptr<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::SetIndexBuffer(Ref<IndexBuffer>& indexBuffer)
 	{
 		glBindVertexArray(m_ArrayID);
 		indexBuffer->Bind();
