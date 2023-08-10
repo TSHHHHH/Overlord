@@ -24,6 +24,7 @@
 
 #include "Overlord/Renderer/Buffer.h"
 #include "Overlord/Renderer/Shader.h"
+#include "Overlord/Renderer/Texture.h"
 #include "Overlord/Renderer/VertexArray.h"
 
 #include "Overlord/Renderer/OrthographicCamera.h"

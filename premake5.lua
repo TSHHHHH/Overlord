@@ -15,10 +15,11 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"]  = "Overlord/vendor/GLFW/include"
-IncludeDir["Glad"]  = "Overlord/vendor/Glad/include"
-IncludeDir["ImGui"] = "Overlord/vendor/imgui"
-IncludeDir["glm"]   = "Overlord/vendor/glm"
+IncludeDir["GLFW"]          = "Overlord/vendor/GLFW/include"
+IncludeDir["Glad"]          = "Overlord/vendor/Glad/include"
+IncludeDir["ImGui"]         = "Overlord/vendor/imgui"
+IncludeDir["glm"]           = "Overlord/vendor/glm"
+IncludeDir["stb_image"]     = "Overlord/vendor/stb_image"
 
 include "Overlord/vendor/GLFW"
 include "Overlord/vendor/Glad"
@@ -43,6 +44,8 @@ project "Overlord"
     {
         "%{prj.name}/src/**.h",
         "%{prj.name}/src/**.cpp",
+        "%{prj.name}/vendor/stb_image/**.h",
+        "%{prj.name}/vendor/stb_image/**.cpp",
         "%{prj.name}/vendor/glm/glm/**.hpp",
         "%{prj.name}/vendor/glm/glm/**.inl"
     }
@@ -59,7 +62,8 @@ project "Overlord"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.ImGui}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.stb_image}"
     }
 
     links

@@ -41,18 +41,19 @@ public:
 		// Try to render a square
 		m_VA_Square.reset(Overlord::VertexArray::Create());
 
-		float vertices_square[3 * 4] = {
-			// Vertex Pos
-			-0.75f, -0.75f, 0.0f,
-			 0.75f, -0.75f, 0.0f,
-			 0.75f,  0.75f, 0.0f,
-			-0.75f,  0.75f, 0.0f
+		float vertices_square[4 * 5] = {
+			// Vertex Pos         // Texture
+			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
 
 		Overlord::Ref<Overlord::VertexBuffer> VB_Square(Overlord::VertexBuffer::Create(vertices_square, sizeof(vertices_square)));
 
 		VB_Square->SetLayout({
-			{ Overlord::ShaderDataType::Float3, "a_Position" }
+			{ Overlord::ShaderDataType::Float3, "a_Position" },
+			{ Overlord::ShaderDataType::Float2, "a_TexCoord" }
 			});
 		m_VA_Square->AddVertexBuffer(VB_Square);
 
@@ -149,6 +150,47 @@ public:
 
 		m_Shader_Blue.reset(Overlord::Shader::Create(vertexSrc_Blue, FragmentSrcFlat));
 
+		std::string vertexSrc_TextureShader = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string FragmentSrc_TextureShader = R"(
+			#version 330 core
+
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_Shader_Tex.reset(Overlord::Shader::Create(vertexSrc_TextureShader, FragmentSrc_TextureShader));
+
+		m_Texture = Overlord::Textur2D::Create("assets/textures/Checkerboard.png");
+
+		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Tex)->Use();
+		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Tex)->SetInt("u_Texture", 0);
+
 		// ==================================================================
 	}
 
@@ -220,8 +262,8 @@ public:
 		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.f);
 		glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.f);
 
-		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader)->Use();
-		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader)->SetFloat4("u_Color", redColor);
+		//std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader)->Use();
+		//std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader)->SetFloat4("u_Color", redColor);
 
 		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Blue)->Use();
 		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Blue)->SetFloat4("u_Color", m_SquareColor);
@@ -232,7 +274,7 @@ public:
 		{
 			for (int x = 0; x < 20; ++x)
 			{
-				glm::vec3 pos(x * 0.2f, y * 0.2f, 0.f);
+				glm::vec3 pos(x * 0.15f, y * 0.15f, 0.f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.f), pos) * scale;
 
 				//if (x % 2 == 0)
@@ -248,7 +290,11 @@ public:
 			}
 		}
 
-		Overlord::Renderer::Submit(m_Shader, m_VertexArray);
+		m_Texture->Bind();
+		Overlord::Renderer::Submit(m_Shader_Tex, m_VA_Square, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+
+		//Triangle
+		//Overlord::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Overlord::Renderer::EndScene();
 	}
@@ -272,10 +318,13 @@ private:
 	glm::vec4 m_SquareColor = { 0.f, 0.f, 0.f, 1.f };
 
 	Overlord::Ref<Overlord::Shader>			m_Shader;
-	Overlord::Ref<Overlord::VertexArray>		m_VertexArray;
+	Overlord::Ref<Overlord::VertexArray>	m_VertexArray;
 
 	Overlord::Ref<Overlord::Shader>			m_Shader_Blue;
-	Overlord::Ref<Overlord::VertexArray>		m_VA_Square;
+	Overlord::Ref<Overlord::VertexArray>	m_VA_Square;
+
+	Overlord::Ref<Overlord::Shader>			m_Shader_Tex;
+	Overlord::Ref<Overlord::Textur2D>		m_Texture;
 
 	Overlord::OrthographicCamera m_Camera;
 
