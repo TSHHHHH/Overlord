@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sandbox", "Sandbox\Sandbox.vcxproj", "{F4C124E3-60A1-A37E-69B9-2E55D5170AE0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Library", "Library", "{A1975F28-0D58-DB5E-D692-24DC4212203B}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLFW", "Overlord\vendor\GLFW\GLFW.vcxproj", "{154B857C-0182-860D-AA6E-6C109684020F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Glad", "Overlord\vendor\Glad\Glad.vcxproj", "{BDD6857C-A90D-870D-52FA-6C103E10030F}"
@@ -10,6 +12,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImGui", "Overlord\vendor\imgui\ImGui.vcxproj", "{C0FF640D-2C14-8DBE-F595-301E616989EF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Overlord", "Overlord\Overlord.vcxproj", "{920D41D3-7EDA-9BDE-A7F3-8986931FD16C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Overlord-Editor", "Overlord-Editor\Overlord-Editor.vcxproj", "{0699B9C5-7224-278A-7B35-AA7EE73F838A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,8 +52,19 @@ Global
 		{920D41D3-7EDA-9BDE-A7F3-8986931FD16C}.Dist|x64.Build.0 = Dist|x64
 		{920D41D3-7EDA-9BDE-A7F3-8986931FD16C}.Release|x64.ActiveCfg = Release|x64
 		{920D41D3-7EDA-9BDE-A7F3-8986931FD16C}.Release|x64.Build.0 = Release|x64
+		{0699B9C5-7224-278A-7B35-AA7EE73F838A}.Debug|x64.ActiveCfg = Debug|x64
+		{0699B9C5-7224-278A-7B35-AA7EE73F838A}.Debug|x64.Build.0 = Debug|x64
+		{0699B9C5-7224-278A-7B35-AA7EE73F838A}.Dist|x64.ActiveCfg = Dist|x64
+		{0699B9C5-7224-278A-7B35-AA7EE73F838A}.Dist|x64.Build.0 = Dist|x64
+		{0699B9C5-7224-278A-7B35-AA7EE73F838A}.Release|x64.ActiveCfg = Release|x64
+		{0699B9C5-7224-278A-7B35-AA7EE73F838A}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{154B857C-0182-860D-AA6E-6C109684020F} = {A1975F28-0D58-DB5E-D692-24DC4212203B}
+		{BDD6857C-A90D-870D-52FA-6C103E10030F} = {A1975F28-0D58-DB5E-D692-24DC4212203B}
+		{C0FF640D-2C14-8DBE-F595-301E616989EF} = {A1975F28-0D58-DB5E-D692-24DC4212203B}
 	EndGlobalSection
 EndGlobal

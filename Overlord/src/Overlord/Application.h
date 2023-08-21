@@ -18,7 +18,7 @@ namespace Overlord
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Overlord Engine");
 		virtual ~Application();
 
 		void Run();
@@ -32,11 +32,13 @@ namespace Overlord
 
 		inline Window& GetWindow() { return *m_Window; }
 
+		void ShutDownApplication();
+
 	// private functions
 	private:
 		bool OnWindowClose(WindowCloseEvent& event);
 
-	// private data member
+	// private data members
 	private:
 		static Application* s_Instance;
 

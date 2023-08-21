@@ -1,5 +1,4 @@
-#include <Overlord.h>
-#include "Overlord/EntryPoint.h"
+#include "EditorLayer.h"
 
 #include "imgui/imgui.h"
 
@@ -8,10 +7,9 @@
 #include "Platform/OpenGL/OpenGLShader.h"
 #include <glm/gtc/type_ptr.hpp>
 
-class ExampleLayer : public Overlord::Layer
+namespace Overlord
 {
-public:
-	ExampleLayer()
+	EditorLayer::EditorLayer()
 		: Layer("Example Layer"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_SquarePosition(0.f)
 	{
 		// ==================================================================
@@ -44,10 +42,10 @@ public:
 
 		float vertices_square[4 * 5] = {
 			// Vertex Pos         // Texture
-			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
-			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
-			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
+			-0.5f, -0.5f, 0.0f, 0.0f, 1.0f,
+			 0.5f, -0.5f, 0.0f, 1.0f, 1.0f,
+			 0.5f,  0.5f, 0.0f, 1.0f, 0.0f,
+			-0.5f,  0.5f, 0.0f, 0.0f, 0.0f
 		};
 
 		Overlord::Ref<Overlord::VertexBuffer> VB_Square(Overlord::VertexBuffer::Create(vertices_square, sizeof(vertices_square)));
@@ -188,14 +186,30 @@ public:
 		m_Shader_Tex.reset(Overlord::Shader::Create(vertexSrc_TextureShader, FragmentSrc_TextureShader));
 
 		m_Texture = Overlord::Textur2D::Create("assets/textures/Checkerboard.png");
+		m_Texture_logo = Overlord::Textur2D::Create("assets/textures/Logo.png");
 
 		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Tex)->Use();
 		std::dynamic_pointer_cast<Overlord::OpenGLShader>(m_Shader_Tex)->SetInt("u_Texture", 0);
 
 		// ==================================================================
+
+		Overlord::FramebufferSpec fbSpec;
+		fbSpec.Width = 1280;
+		fbSpec.Height = 720;
+		m_Framebuffer = Overlord::Framebuffer::Create(fbSpec);
 	}
 
-	void OnUpdate(Overlord::Timestep ts) override
+	void EditorLayer::OnAttach()
+	{
+
+	}
+
+	void EditorLayer::OnDetach()
+	{
+
+	}
+
+	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		//Delta time debug
 		//OLD_TRACE("Delta time: {0}s {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
@@ -247,6 +261,8 @@ public:
 			m_SquarePosition.y -= 1.f * ts;
 		}*/
 
+		m_Framebuffer->Bind();
+
 		// Render a background color
 		Overlord::RenderCommand::SetClearColor({ 0.14f, 0.14f, 0.14f, 1.0f });
 		Overlord::RenderCommand::Clear();
@@ -291,15 +307,103 @@ public:
 
 		m_Texture->Bind();
 		Overlord::Renderer::Submit(m_Shader_Tex, m_VA_Square, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		m_Texture_logo->Bind();
+		Overlord::Renderer::Submit(m_Shader_Tex, m_VA_Square, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 
 		//Triangle
 		//Overlord::Renderer::Submit(m_Shader, m_VertexArray);
 
 		Overlord::Renderer::EndScene();
+
+		m_Framebuffer->Unbind();
 	}
 
-	void OnImGuiRender() override
+	void EditorLayer::OnImGuiRender()
 	{
+		// Docking space
+		// If you strip some features of, this demo is pretty much equivalent to calling DockSpaceOverViewport()!
+		// In most cases you should be able to just call DockSpaceOverViewport() and ignore all the code below!
+		// In this specific demo, we are not using DockSpaceOverViewport() because:
+		// - we allow the host window to be floating/moveable instead of filling the viewport (when opt_fullscreen == false)
+		// - we allow the host window to have padding (when opt_padding == true)
+		// - we have a local menu bar in the host window (vs. you could use BeginMainMenuBar() + DockSpaceOverViewport() in your code!)
+		// TL;DR; this demo is more complicated than what you would normally use.
+		// If we removed all the options we are showcasing, this demo would become:
+		//     void ShowExampleAppDockSpace()
+		//     {
+		//         ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
+		//     }
+
+		static bool p_open = true;
+
+		static bool opt_fullscreen = true;
+		static bool opt_padding = false;
+		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
+		// because it would be confusing to have two docking targets within each others.
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+		if (opt_fullscreen)
+		{
+			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowPos(viewport->WorkPos);
+			ImGui::SetNextWindowSize(viewport->WorkSize);
+			ImGui::SetNextWindowViewport(viewport->ID);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+			window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+			window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+		}
+		else
+		{
+			dockspace_flags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
+		}
+
+		// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
+		// and handle the pass-thru hole, so we ask Begin() to not render a background.
+		if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+			window_flags |= ImGuiWindowFlags_NoBackground;
+
+		// Important: note that we proceed even if Begin() returns false (aka window is collapsed).
+		// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,
+		// all active windows docked into it will lose their parent and become undocked.
+		// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise
+		// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.
+		if (!opt_padding)
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+		ImGui::Begin("DockSpace Demo", &p_open, window_flags);
+
+		if (!opt_padding)
+			ImGui::PopStyleVar();
+
+		if (opt_fullscreen)
+			ImGui::PopStyleVar(2);
+
+		// Submit the DockSpace
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+		{
+			ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
+			ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
+		}
+		else
+		{
+			// ShowDockingDisabledMessage();
+		}
+
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Exit")) Overlord::Application::Get().ShutDownApplication();
+
+				ImGui::EndMenu();
+			}
+
+			ImGui::EndMenuBar();
+		}
+
 		// Color picker
 		{
 			ImGui::Begin("Test ImGui Window");
@@ -308,51 +412,34 @@ public:
 
 			ImGui::End();
 		}
+
+		// Viewport
+		{
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
+			ImGui::Begin("Viewport");
+
+			glm::vec2 viewportPanelSize = *((glm::vec2*)&ImGui::GetContentRegionAvail());
+
+			if (m_ViewportSize != viewportPanelSize)
+			{
+				m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+				m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
+				// Resize camera HERE
+			}
+
+			uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+			ImGui::Image((void*)textureID, ImVec2{ m_ViewportSize.x, m_ViewportSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+			ImGui::End();
+			ImGui::PopStyleVar();
+		}
+
+		ImGui::End();
 	}
 
-	void OnEvent(Overlord::Event& event) override
-	{
-		
-	}
-
-private:
-	// Rendering Components
-	glm::vec4 m_SquareColor = { 0.f, 0.f, 0.f, 1.f };
-
-	Overlord::Ref<Overlord::Shader>			m_Shader;
-	Overlord::Ref<Overlord::VertexArray>	m_VertexArray;
-
-	Overlord::Ref<Overlord::Shader>			m_Shader_Blue;
-	Overlord::Ref<Overlord::VertexArray>	m_VA_Square;
-
-	Overlord::Ref<Overlord::Shader>			m_Shader_Tex;
-	Overlord::Ref<Overlord::Textur2D>		m_Texture;
-
-	Overlord::OrthographicCamera m_Camera;
-
-	glm::vec3 m_CameraPosition{ 0.f, 0.f, 0.f };
-	float m_CameraRotation = 0.f;
-
-	glm::vec3 m_SquarePosition;
-};
-
-// ==================================================================
-
-class SandBox : public Overlord::Application
-{
-public:
-	SandBox()
-	{
-		PushLayer(new ExampleLayer());
-	}
-
-	~SandBox()
+	void EditorLayer::OnEvent(Event& event)
 	{
 
 	}
-};
-
-Overlord::Application* Overlord::CreateApplication()
-{
-	return new SandBox();
 }

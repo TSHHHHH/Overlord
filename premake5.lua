@@ -21,9 +21,11 @@ IncludeDir["ImGui"]         = "Overlord/vendor/imgui"
 IncludeDir["glm"]           = "Overlord/vendor/glm"
 IncludeDir["stb_image"]     = "Overlord/vendor/stb_image"
 
-include "Overlord/vendor/GLFW"
-include "Overlord/vendor/Glad"
-include "Overlord/vendor/imgui"
+group "Library"
+    include "Overlord/vendor/GLFW"
+    include "Overlord/vendor/Glad"
+    include "Overlord/vendor/imgui"
+group ""
 
 project "Overlord"
     location "Overlord"
@@ -86,6 +88,60 @@ project "Overlord"
             "OLD_PLATFORM_WINDOWS",
             "OLD_BUILD_DLL",
             "GLFW_INCLUDE_NONE"
+        }
+
+    filter "configurations:Debug"
+        defines "OLD_DEBUG"
+        runtime "Debug"
+        symbols "on"
+
+    filter "configurations:Release"
+        defines "OLD_RELEASE"
+        runtime "Release"
+        optimize "on"
+
+    filter "configurations:Dist"
+        defines "OLD_DIST"
+        runtime "Release"
+        optimize "on"
+
+project "Overlord-Editor"
+    location "Overlord-Editor"
+
+    kind "ConsoleApp"
+    staticruntime "on"
+
+    language "C++"
+    cppdialect "C++17"
+
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    files
+    {
+        "%{prj.name}/src/**.h",
+        "%{prj.name}/src/**.cpp"
+    }
+
+    includedirs
+    {
+        "Overlord/vendor/spdlog/include",
+        "Overlord/src",
+        "Overlord/vendor",
+        "%{IncludeDir.glm}"
+    }
+
+    links
+    {
+        "Overlord"
+    }
+
+    filter "system:windows"
+        systemversion "latest"
+
+        defines
+        {
+            "OLD_PLATFORM_WINDOWS"
         }
 
     filter "configurations:Debug"
