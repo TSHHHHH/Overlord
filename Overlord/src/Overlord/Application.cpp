@@ -11,13 +11,17 @@ namespace Overlord
 
 	// ==================================================================
 	// Definitions
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		OLD_CORE_ASSERT(!s_Instance, "Application already exists!!");
 		s_Instance = this;
 
-		m_Window = std::unique_ptr<Window>(Window::Create());
+		// Window Init
+		m_Window = std::unique_ptr<Window>(Window::Create(name));
 		m_Window->SetEventCallback(OLD_BIND_EVENT_FN(Application::OnEvent));
+
+		// Renderer Init
+		Renderer::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
@@ -77,9 +81,14 @@ namespace Overlord
 		}
 	}
 
-	bool Application::OnWindowClose(WindowCloseEvent& event)
+	void Application::ShutDownApplication()
 	{
 		m_Running = false;
+	}
+
+	bool Application::OnWindowClose(WindowCloseEvent& event)
+	{
+		ShutDownApplication();
 		return true;
 	}
 }
