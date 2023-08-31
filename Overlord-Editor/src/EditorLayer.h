@@ -43,5 +43,6 @@ namespace Overlord
 
 		// Editor Components
 		glm::vec2 m_ViewportSize;
+		bool m_ViewportFocused;
 	};
 }

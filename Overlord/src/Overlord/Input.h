@@ -2,45 +2,56 @@
 
 #include "Overlord/core.h"
 
+#include "KeyCodes.h"
+#include "MouseButtonCodes.h"
+
 namespace Overlord
 {
-	class OLD_API Input
+	class Input
 	{
 	public:
-		inline static bool IsKeyPressed(int keycode)
-		{
-			return s_Instance->IsKeyPressedImpl(keycode);
-		}
+		static bool IsKeyPressed(int key);
 
-		inline static bool IsMouseButtonPressed(int mouseButton)
-		{
-			return s_Instance->IsMouseButtonPressedImpl(mouseButton);
-		}
+		static bool IMouseButtonPressed(int button);
+		static std::pair<float, float> GetMousePosition();
+		static float GetMouseX();
+		static float GetMouseY();
 
-		inline static std::pair<float, float> GetMousePosition()
-		{
-			return s_Instance->GetMousePostionImpl();
-		}
+		//inline static bool IsKeyPressed(int keycode)
+		//{
+		//	return s_Instance->IsKeyPressedImpl(keycode);
+		//}
 
-		inline static float GetMouseX()
-		{
-			return s_Instance->GetMouseXImpl();
-		}
+		//inline static bool IsMouseButtonPressed(int mouseButton)
+		//{
+		//	return s_Instance->IsMouseButtonPressedImpl(mouseButton);
+		//}
 
-		inline static float GetMouseY()
-		{
-			return s_Instance->GetMouseYImpl();
-		}
+		//inline static std::pair<float, float> GetMousePosition()
+		//{
+		//	return s_Instance->GetMousePostionImpl();
+		//}
 
-	protected:
-		virtual bool IsKeyPressedImpl(int keycode) = 0;
+		//inline static float GetMouseX()
+		//{
+		//	return s_Instance->GetMouseXImpl();
+		//}
 
-		virtual bool IsMouseButtonPressedImpl(int mouseButton) = 0;
-		virtual std::pair<float, float> GetMousePostionImpl() = 0;
-		virtual float GetMouseXImpl() = 0;
-		virtual float GetMouseYImpl() = 0;
+		//inline static float GetMouseY()
+		//{
+		//	return s_Instance->GetMouseYImpl();
+		//}
 
-	private:
-		static Input* s_Instance;
+		//protected:
+		//	virtual bool IsKeyPressedImpl(int keycode) = 0;
+
+		//	virtual bool IsMouseButtonPressedImpl(int mouseButton) = 0;
+
+		//	virtual std::pair<float, float> GetMousePostionImpl() = 0;
+		//	virtual float GetMouseXImpl() = 0;
+		//	virtual float GetMouseYImpl() = 0;
+
+		//private:
+		//	static Input* s_Instance;
 	};
 }

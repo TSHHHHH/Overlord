@@ -16,6 +16,8 @@ namespace Overlord
 	class Framebuffer
 	{
 	public:
+		virtual ~Framebuffer() = default;
+
 		static Ref<Framebuffer> Create(const FramebufferSpec& spec);
 
 		virtual void Bind() = 0;

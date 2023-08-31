@@ -41,6 +41,7 @@ namespace Overlord
 		virtual std::string ToString() const { return GetName(); }
 
 		bool isHandled() const { return m_Handled; }
+		bool& GetHandled() { return m_Handled; }
 
 		inline bool IsInCategory(EventCategory category)
 		{

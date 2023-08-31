@@ -149,41 +149,41 @@ namespace Overlord
 
 		m_Shader_Blue.reset(Overlord::Shader::Create(vertexSrc_Blue, FragmentSrcFlat));
 
-		std::string vertexSrc_TextureShader = R"(
-			#version 330 core
+		//std::string vertexSrc_TextureShader = R"(
+		//	#version 330 core
 
-			layout(location = 0) in vec3 a_Position;
-			layout(location = 1) in vec2 a_TexCoord;
+		//	layout(location = 0) in vec3 a_Position;
+		//	layout(location = 1) in vec2 a_TexCoord;
 
-			uniform mat4 u_ViewProjection;
-			uniform mat4 u_Transform;
+		//	uniform mat4 u_ViewProjection;
+		//	uniform mat4 u_Transform;
 
-			out vec2 v_TexCoord;
+		//	out vec2 v_TexCoord;
 
-			void main()
-			{
-				v_TexCoord = a_TexCoord;
+		//	void main()
+		//	{
+		//		v_TexCoord = a_TexCoord;
 
-				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-			}
-		)";
+		//		gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+		//	}
+		//)";
 
-		std::string FragmentSrc_TextureShader = R"(
-			#version 330 core
+		//std::string FragmentSrc_TextureShader = R"(
+		//	#version 330 core
 
-			layout(location = 0) out vec4 color;
+		//	layout(location = 0) out vec4 color;
 
-			in vec2 v_TexCoord;
+		//	in vec2 v_TexCoord;
 
-			uniform sampler2D u_Texture;
+		//	uniform sampler2D u_Texture;
 
-			void main()
-			{
-				color = texture(u_Texture, v_TexCoord);
-			}
-		)";
+		//	void main()
+		//	{
+		//		color = texture(u_Texture, v_TexCoord);
+		//	}
+		//)";
 
-		m_Shader_Tex.reset(Overlord::Shader::Create(vertexSrc_TextureShader, FragmentSrc_TextureShader));
+		m_Shader_Tex.reset(Overlord::Shader::Create("assets/shaders/Texture.glsl"));
 
 		m_Texture = Overlord::Textur2D::Create("assets/textures/Checkerboard.png");
 		m_Texture_logo = Overlord::Textur2D::Create("assets/textures/Logo.png");
@@ -214,32 +214,35 @@ namespace Overlord
 		//Delta time debug
 		//OLD_TRACE("Delta time: {0}s {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
 
-		// Camera position + rotation input
-		if (Overlord::Input::IsKeyPressed(OVLD_KEY_A))
+		if (m_ViewportFocused)
 		{
-			m_CameraPosition.x -= 1.f * ts;
-		}
-		else if (Overlord::Input::IsKeyPressed(OVLD_KEY_D))
-		{
-			m_CameraPosition.x += 1.f * ts;
-		}
+			// Camera position + rotation input
+			if (Overlord::Input::IsKeyPressed(OVLD_KEY_A))
+			{
+				m_CameraPosition.x -= 1.f * ts;
+			}
+			else if (Overlord::Input::IsKeyPressed(OVLD_KEY_D))
+			{
+				m_CameraPosition.x += 1.f * ts;
+			}
 
-		if (Overlord::Input::IsKeyPressed(OVLD_KEY_W))
-		{
-			m_CameraPosition.y += 1.f * ts;
-		}
-		else if (Overlord::Input::IsKeyPressed(OVLD_KEY_S))
-		{
-			m_CameraPosition.y -= 1.f * ts;
-		}
+			if (Overlord::Input::IsKeyPressed(OVLD_KEY_W))
+			{
+				m_CameraPosition.y += 1.f * ts;
+			}
+			else if (Overlord::Input::IsKeyPressed(OVLD_KEY_S))
+			{
+				m_CameraPosition.y -= 1.f * ts;
+			}
 
-		if (Overlord::Input::IsKeyPressed(OVLD_KEY_E))
-		{
-			m_CameraRotation += 100.f * ts;
-		}
-		else if (Overlord::Input::IsKeyPressed(OVLD_KEY_Q))
-		{
-			m_CameraRotation -= 100.f * ts;
+			if (Overlord::Input::IsKeyPressed(OVLD_KEY_E))
+			{
+				m_CameraRotation += 100.f * ts;
+			}
+			else if (Overlord::Input::IsKeyPressed(OVLD_KEY_Q))
+			{
+				m_CameraRotation -= 100.f * ts;
+			}
 		}
 
 		// Square transform input
@@ -417,6 +420,11 @@ namespace Overlord
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
 			ImGui::Begin("Viewport");
+
+			// Update whether the viewport window is focused
+			m_ViewportFocused = ImGui::IsWindowFocused();
+			// TO DO: Insert viewport hovered detection here
+			Application::Get().GetImGuiLayer()->SetBlockEvents(!m_ViewportFocused);
 
 			glm::vec2 viewportPanelSize = *((glm::vec2*)&ImGui::GetContentRegionAvail());
 

@@ -75,6 +75,13 @@ namespace Overlord
 		ImGui::ShowDemoWindow(&show);
 	}
 
+	void ImGuiLayer::OnEvent(Event& e)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		e.GetHandled() |= e.IsInCategory(EventCategory_Mouse) & io.WantCaptureMouse;
+		e.GetHandled() |= e.IsInCategory(EventCategory_Keyboard) & io.WantCaptureKeyboard;
+	}
+
 	void ImGuiLayer::End()
 	{
 		ImGuiIO& io = ImGui::GetIO();

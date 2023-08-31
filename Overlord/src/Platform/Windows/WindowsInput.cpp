@@ -1,14 +1,12 @@
 #include "oldpch.h"
-#include "WindowsInput.h"
+#include "Overlord/Input.h"
 
 #include "Overlord/Application.h"
 #include <GLFW/glfw3.h>
 
 namespace Overlord
 {
-	Input* Input::s_Instance = new WindowsInput();
-
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
+	bool Input::IsKeyPressed(int keycode)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
@@ -17,7 +15,7 @@ namespace Overlord
 		return (state == GLFW_PRESS) || (state == GLFW_REPEAT);
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int mouseButton)
+	bool Input::IMouseButtonPressed(int mouseButton)
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
@@ -26,7 +24,7 @@ namespace Overlord
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePostionImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 
@@ -36,15 +34,15 @@ namespace Overlord
 		return { (float)xpos, (float)ypos };
 	}
 
-	float WindowsInput::GetMouseXImpl()
+	float Input::GetMouseX()
 	{
-		auto [x, y] = GetMousePostionImpl();
+		auto [x, y] = GetMousePosition();
 		return x;
 	}
 
-	float WindowsInput::GetMouseYImpl()
+	float Input::GetMouseY()
 	{
-		auto [x, y] = GetMousePostionImpl();
+		auto [x, y] = GetMousePosition();
 		return y;
 	}
 }

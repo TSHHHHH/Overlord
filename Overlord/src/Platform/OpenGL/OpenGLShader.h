@@ -3,11 +3,15 @@
 #include "Overlord/Renderer/Shader.h"
 #include <glm/glm.hpp>
 
+// Temp
+typedef unsigned int GLenum;
+
 namespace Overlord
 {
 	class OpenGLShader : public Shader
 	{
 	public:
+		OpenGLShader(const std::string& filePath);
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
 		virtual ~OpenGLShader();
 
@@ -27,6 +31,13 @@ namespace Overlord
 		void SetMat4	(const std::string& name, const glm::mat4& mat4) const;
 		// =================================================
 
+	// Private Functions
+	private:
+		std::string ReadFile(const std::string& filePath);
+		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+		void Compile(std::unordered_map<GLenum, std::string> shaderSource);
+
+	// Private Data Members
 	private:
 		uint32_t m_ProgramID;
 	};
